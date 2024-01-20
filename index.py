@@ -76,9 +76,9 @@ for i in df['Equipe'].unique():
 
 # ==== Layout ==== #
 app.layout = dbc.Container(children=[
-    # Row 1 - tam:12
+    # ROW 1 - tam:12
     dbc.Row([
-        dbc.Col([
+        dbc.Col([  # Coluna 1 da ROW 1
             dbc.Card([
                 dbc.CardBody([
                     dbc.Row([
@@ -104,7 +104,7 @@ app.layout = dbc.Container(children=[
                 ])
             ], style=tab_card)
         ], sm=4, lg=2),
-        dbc.Col([
+        dbc.Col([  # Coluna 2 da ROW 1
             dbc.Card([
                 dbc.CardBody([
                     dbc.Row(
@@ -125,7 +125,7 @@ app.layout = dbc.Container(children=[
                 ])
             ], style=tab_card)
         ], sm=12, lg=7),
-        dbc.Col([
+        dbc.Col([  # Coluna 3 da ROW 1
             dbc.Card([
                 dbc.CardBody([
                     dbc.Row(
@@ -144,6 +144,66 @@ app.layout = dbc.Container(children=[
                         ])
                     )
                 ])
+            ], style=tab_card)
+        ], sm=12, lg=3)
+    ], className='g-2 my-auto', style={'margin-top': '7px'}),
+
+    # ROW 2
+    dbc.Row([
+        dbc.Col([  # Coluna 1 da ROW 2
+            dbc.Row([  # Row 1 da coluna 1
+                dbc.Col([
+                    dbc.Card([
+                        dbc.CardBody([
+                            dcc.Graph(id='graph3', className='dbc',
+                                      config=config_graph)
+                        ])
+                    ], style=tab_card)
+                ])
+            ]),
+            dbc.Row([  # Row 2 da coluna 1
+                dbc.Col([
+                    dbc.Card([
+                        dbc.CardBody([
+                            dcc.Graph(id='graph4', className='dbc',
+                                      config=config_graph)
+                        ])
+                    ], style=tab_card)
+                ])
+                # margem do card
+            ], className='g-2 my-auto', style={'margin-top': '7px'})
+        ], sm=12, lg=5),
+        dbc.Col([  # Coluna 2 da ROW 2
+            dbc.Row([
+                dbc.Col([
+                    dbc.Card([
+                        dbc.CardBody([
+                            dcc.Graph(id='graph5', className='dbc',
+                                      config=config_graph)
+                        ])
+                    ], style=tab_card)
+                ], sm=6),
+                dbc.Col([
+                    dbc.Card([
+                        dbc.CardBody([
+                            dcc.Graph(id='graph6', className='dbc',
+                                      config=config_graph)
+                        ])
+                    ], style=tab_card)
+                ], sm=6)
+            ], className='g-2'),
+            dbc.Row([
+                dbc.Col([
+                    dbc.Card([
+                        dcc.Graph(id='graph7', className='dbc',
+                                  config=config_graph)
+                    ], style=tab_card)
+                ])
+            ], className='g-2 my-auto', style={'margin-top': '7px'})
+        ], sm=12, lg=4),
+        dbc.Col([  # Coluna 3 da ROW 2
+            dbc.Card([
+                dcc.Graph(id='graph8', className='dbc', config=config_graph)
             ], style=tab_card)
         ], sm=12, lg=3)
     ], className='g-2 my-auto', style={'margin-top': '7px'})
