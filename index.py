@@ -37,7 +37,7 @@ url_theme2 = dbc.themes.DARKLY
 # === Lendo e limpando dados === #
 
 df = pd.read_csv('dataset.csv')
-df_cru = df.copy()
+df_cru = df.copy()  # Refatorar essa ideia
 
 # Meses em números para poupar memória
 df.loc[df['Mês'] == 'Jan', 'Mês'] = 1
@@ -66,6 +66,11 @@ df['Mês'] = df['Mês'].astype(int)
 
 # Criando opções pros filtros que virão
 options_month = [{'label': 'Ano todo', 'value': 0}]
+'''
+    Dá uma olhada aqui, pra mim não faz muito sentido substituir
+    os meses por números para otimizar processo e depois criar uma
+    cópia do original para ser percorrida. (Refatorar)
+'''
 for i, j in zip(df_cru['Mês'].unique(), df['Mês'].unique()):
     options_month.append({'label': i, 'value': j})
 options_month = sorted(options_month, key=lambda x: x['value'])
@@ -73,6 +78,49 @@ options_month = sorted(options_month, key=lambda x: x['value'])
 options_team = [{'label': 'Todas Equipes', 'value': 0}]
 for i in df['Equipe'].unique():
     options_team.append({'label': i, 'value': i})
+
+# === Função dos filtro === #
+
+
+# Dá uma olhada nessa função depois, acho que dá pra refatorar
+def month_filter(month):
+    if month == 0:
+        mask = df['Mês'].isin(df['Mês'].unique())
+    else:
+        mask = df['Mês'].isin([month])
+    return mask
+
+
+def convert_to_text(month):
+    match month:
+        case 0:
+            txt = 'Ano Todo'
+        case 1:
+            txt = 'Janeiro'
+        case 2:
+            txt = 'Fevereiro'
+        case 3:
+            txt = 'Março'
+        case 4:
+            txt = 'Abril'
+        case 5:
+            txt = 'Maio'
+        case 6:
+            txt = 'Junho'
+        case 7:
+            txt = 'Julho'
+        case 8:
+            txt = 'Agosto'
+        case 9:
+            txt = 'Setembro'
+        case 10:
+            txt = 'Outubro'
+        case 11:
+            txt = 'Novembro'
+        case 12:
+            txt = 'Dezembro'
+    return txt
+
 
 # ==== Layout ==== #
 app.layout = dbc.Container(children=[
@@ -260,6 +308,37 @@ app.layout = dbc.Container(children=[
 ], fluid=True, style={'height': '100vh'})
 
 # === Callbacks === #
+# Graph 1 and 2 // bar and pie
+
+
+@app.callback(
+    Output('graph1', 'figure'),
+    Output('graph2', 'figure'),
+    Output('month-select', 'children'),
+    Input('radio-month', 'value'),
+    Input(ThemeSwitchAIO.ids.switch("theme"), "value")
+)
+def graph1(month, toggle):
+    template = template_theme1 if toggle else template_theme2
+
+    mask = month_filter(month)
+    df_1 = df.loc[mask]
+
+    df_1 = df_1.groupby(['Equipe', 'Consultor'])['Valor Pago'].sum()
+    df_1 = df_1.sort_values(ascending=False)
+    df_1 = df_1.groupby('Equipe').head(1).reset_index()
+
+    fig2 = go.Figure(go.Pie(
+        labels=df_1['Consultor'] + ' - ' + df_1['Equipe'], values=df_1['Valor Pago'], hole=.6))
+    fig1 = go.Figure(go.Bar(
+        x=df_1['Consultor'], y=df_1['Valor Pago'], textposition='auto', text=df_1['Valor Pago']))
+    fig1.update_layout(main_config, height=200, template=template)
+    fig2.update_layout(main_config, height=200,
+                       template=template, showlegend=False)
+
+    select = html.H1(convert_to_text(month))
+
+    return fig1, fig2, select
 
 
 # Run server
