@@ -114,6 +114,7 @@ app.layout = dbc.Container(children=[
                     ),
                     dbc.Row([
                         dbc.Col([
+                            # className='dbc' para linkar com os temas
                             dcc.Graph(id='graph1', className='dbc',
                                       config=config_graph)
                         ], sm=12, md=7),
@@ -206,6 +207,55 @@ app.layout = dbc.Container(children=[
                 dcc.Graph(id='graph8', className='dbc', config=config_graph)
             ], style=tab_card)
         ], sm=12, lg=3)
+    ], className='g-2 my-auto', style={'margin-top': '7px'}),
+
+    # ROW 3
+    dbc.Row([
+        dbc.Col([  # Coluna 1 do ROW 3
+            dbc.Card([
+                dbc.CardBody([
+                    html.H4('Distribuição de Propaganda'),
+                    # className='dbc' para linkar com os temas
+                    dcc.Graph(id='graph9', className='dbc',
+                              config=config_graph)
+                ])
+            ], style=tab_card)
+        ], sm=12, lg=2),  # sm: 12/12 no mobile, lg: 2/12 no PC
+        dbc.Col([  # Coluna 2 do ROW 3
+            dbc.Card([
+                dbc.CardBody([
+                    html.H4("Valores de Propaganda convertidos por mês"),
+                    # className='dbc' para linkar com os temas
+                    dcc.Graph(id='graph10', className='dbc',
+                              config=config_graph)
+                ])
+            ], style=tab_card)
+        ], sm=12, lg=5),  # sm: 12/12 no mobile, lg: 5/12 no PC
+        dbc.Col([  # Coluna 3 do ROW 3
+            dbc.Card([
+                dbc.CardBody([
+                    dcc.Graph(id='graph11', className='dbc',
+                              config=config_graph)
+                ])
+            ], style=tab_card)
+        ], sm=12, lg=3),  # sm: 12/12 no mobile, lg: 3/12 no PC
+        dbc.Col([  # Coluna 4 do Row 3
+            dbc.Card([
+                dbc.CardBody([
+                    html.H5('Escolha a Equipe'),
+                    dbc.RadioItems(
+                        id="radio-team",
+                        options=options_team,
+                        value=0,
+                        inline=True,
+                        labelCheckedClassName="text-warning",
+                        inputCheckedClassName="border border-warning bg-warning",
+                    ),
+                    html.Div(
+                        id='team-select', style={'text-align': 'center', 'margin-top': '30px'}, className='dbc')
+                ])
+            ], style=tab_card)
+        ], sm=12, lg=2),  # sm: 12/12 no mobile, lg: 2/12 no PC
     ], className='g-2 my-auto', style={'margin-top': '7px'})
 ], fluid=True, style={'height': '100vh'})
 
