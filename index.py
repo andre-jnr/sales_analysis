@@ -4,7 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 
-from dash_bootstrap_components import ThemeSwitchAIO
+from dash_bootstrap_templates import ThemeSwitchAIO
 import dash
 
 FONT_AWSOME = ['https://use.fontawesome.com/releases/v5.10.2/css/all.css']
@@ -40,7 +40,7 @@ df = pd.read_csv('dataset.csv')
 df_cru = df.copy()
 
 # Meses em números para poupar memória
-df.loc[df['Mês'] == 'Jan', 'Mês'] == 1
+df.loc[df['Mês'] == 'Jan', 'Mês'] = 1
 df.loc[df['Mês'] == 'Fev', 'Mês'] = 2
 df.loc[df['Mês'] == 'Mar', 'Mês'] = 3
 df.loc[df['Mês'] == 'Abr', 'Mês'] = 4
@@ -76,7 +76,7 @@ for i in df['Equipe'].unique():
 
 # ==== Layout ==== #
 app.layout = dbc.Container(children=[
-    # Row 1
+    # Row 1 - tam:12
     dbc.Row([
         dbc.Col([
             dbc.Card([
@@ -93,7 +93,7 @@ app.layout = dbc.Container(children=[
                     dbc.Row([
                         dbc.Col([
                             ThemeSwitchAIO(aio_id="theme", themes=[
-                                           url_theme1, url_theme2]),
+                                url_theme1, url_theme2]),
                             html.Legend("André Júnior")
                         ])
                     ], style={'margin-top': '10px'}),
@@ -120,7 +120,7 @@ app.layout = dbc.Container(children=[
                         dbc.Col([
                             dcc.Graph(id='graph2', className='dbc',
                                       config=config_graph)
-                        ], sm=12, lg=5)
+                        ], sm=12, md=5)  # sm - tela pequena, md - tela grande
                     ])
                 ])
             ], style=tab_card)
