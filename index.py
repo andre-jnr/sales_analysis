@@ -35,9 +35,7 @@ url_theme1 = dbc.themes.FLATLY
 url_theme2 = dbc.themes.DARKLY
 
 # === Lendo e limpando dados === #
-
 df = pd.read_csv('dataset.csv')
-df_cru = df.copy()  # Refatorar essa ideia
 
 # Meses em números para poupar memória
 df.loc[df['Mês'] == 'Jan', 'Mês'] = 1
@@ -65,30 +63,34 @@ df['Dia'] = df['Dia'].astype(int)
 df['Mês'] = df['Mês'].astype(int)
 
 # Criando opções pros filtros que virão
-options_month = [{'label': 'Ano todo', 'value': 0}]
-'''
-    Dá uma olhada aqui, pra mim não faz muito sentido substituir
-    os meses por números para otimizar processo e depois criar uma
-    cópia do original para ser percorrida. (Refatorar)
-'''
-for i, j in zip(df_cru['Mês'].unique(), df['Mês'].unique()):
-    options_month.append({'label': i, 'value': j})
-options_month = sorted(options_month, key=lambda x: x['value'])
+meses = {
+    'Ano Todo': 0,
+    'Janeiro': 1,
+    'Fevereiro': 2,
+    'Março': 3,
+    'Abril': 4,
+    'Maio': 5,
+    'Junho': 6,
+    'Julho': 7,
+    'Agosto': 8,
+    'Setembro': 9,
+    'Outubro': 10,
+    'Novembro': 11,
+    'Dezembro': 12
+}
+options_month = [{'label': mes, 'value': numero}
+                 for mes, numero in meses.items()]
 
 options_team = [{'label': 'Todas Equipes', 'value': 0}]
 for i in df['Equipe'].unique():
     options_team.append({'label': i, 'value': i})
 
+
 # === Função dos filtro === #
-
-
-# Dá uma olhada nessa função depois, acho que dá pra refatorar
 def month_filter(month):
     if month == 0:
-        mask = df['Mês'].isin(df['Mês'].unique())
-    else:
-        mask = df['Mês'].isin([month])
-    return mask
+        return df['Mês'].isin(df['Mês'].unique())
+    return df['Mês'].isin([month])
 
 
 def convert_to_text(month):
@@ -124,10 +126,8 @@ def convert_to_text(month):
 
 def team_filter(team):
     if team == 0:
-        mask = df['Equipe'].isin(df['Equipe'].unique())
-    else:
-        mask = df['Equipe'].isin([team])
-    return mask
+        return df['Equipe'].isin(df['Equipe'].unique())
+    return df['Equipe'].isin([team])
 
 
 # ==== Layout ==== #
@@ -156,7 +156,7 @@ app.layout = dbc.Container(children=[
                     ], style={'margin-top': '10px'}),
                     dbc.Row([
                         dbc.Button(
-                            "Visite o Site", href="https://github.com/andre-jnr", target="_blank")
+                            "github do desenvolvedor", href="https://github.com/andre-jnr", target="_blank")
                     ], style={'margin-top': '10px'})
                 ])
             ], style=tab_card)
